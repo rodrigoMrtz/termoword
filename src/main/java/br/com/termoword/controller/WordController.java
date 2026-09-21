@@ -1,0 +1,29 @@
+package br.com.termoword.controller;
+
+import br.com.termoword.service.WordService;
+import br.com.termoword.dto.word.CreateWordRequest;
+import br.com.termoword.dto.word.WordResponse;
+
+import jakarta.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/words")
+public class WordController {
+    
+    private final WordService wordservice;
+
+    public WordController(WordService wordservice) {
+        this.wordservice = wordservice;
+    }
+
+    @PostMapping 
+    @ResponseStatus (HttpStatus.CREATED)
+    public WordResponse create(
+        @Valid @RequestBody CreateWordRequest request
+    ) {
+        return wordservice.create(request);
+    }
+}   
