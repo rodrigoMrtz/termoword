@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: termoword
+  
+  # Configuração da conexao com o banco de dados PostgreSQL
+  datasource:
+    url: jdbc:postgresql://localhost:5432/termoword
+    username: postgres
+    password: ${DB_PASSWORD}
+
+  # Java Persistence API (JPA) configuração
+  jpa:
+    hibernate:
+      ddl-auto: validate
+      show-sql: true
+      properties:
+        hibernate:
+          format_sql: true
+  
+  server:
+    port:8080

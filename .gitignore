@@ -49,4 +49,3 @@ Thumbs.db
 # Local configuration
 application-local.yml
 application-local.properties
-application.yml
