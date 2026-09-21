@@ -1,12 +1,14 @@
 spring:
+  config:
+    import: "optional:file:.env[.properties]"
   application:
     name: termoword
   
-  # Configuração da conexao com o banco de dados PostgreSQL
+  # Configuração da conexão com o banco de dados PostgreSQL
   datasource:
     url: jdbc:postgresql://localhost:5432/termoword
-    username: postgres
-    password: ${DB_PASSWORD}
+    username: "${DB_USERNAME}"
+    password: "${DB_PASSWORD}"
 
   # Java Persistence API (JPA) configuração
   jpa:
@@ -17,5 +19,5 @@ spring:
         hibernate:
           format_sql: true
   
-  server:
-    port:8080
+server:
+  port: 8080
