@@ -21,7 +21,7 @@ public class Word {
     @Column (length = 20)
     private String difficulty;
     @Column (nullable = false)
-    private Boolean active;
+    private Boolean active = true;
     @Column (name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
