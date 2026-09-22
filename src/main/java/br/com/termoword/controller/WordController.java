@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/words")
+@RequestMapping("/api/words")
 public class WordController {
     
     private final WordService wordservice;
