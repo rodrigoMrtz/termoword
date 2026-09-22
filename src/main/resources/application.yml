@@ -6,7 +6,7 @@ spring:
   
   # Configuração da conexão com o banco de dados PostgreSQL
   datasource:
-    url: jdbc:postgresql://localhost:5432/termoword
+    url: "${DB_URL}"
     username: "${DB_USERNAME}"
     password: "${DB_PASSWORD}"
 
