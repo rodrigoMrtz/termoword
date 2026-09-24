@@ -9,6 +9,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/words")
 public class WordController {
@@ -26,4 +28,14 @@ public class WordController {
     ) {
         return wordservice.create(request);
     }
-}   
+
+    @GetMapping("/{id}")
+    public WordResponse findById(@PathVariable Long id) {
+        return wordservice.findById(id);
+    }
+
+    @GetMapping 
+    public List<WordResponse> findAll() {
+        return wordservice.findAll();
+    }
+}

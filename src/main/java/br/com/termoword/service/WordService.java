@@ -1,11 +1,14 @@
 package br.com.termoword.service;
 
 import br.com.termoword.entity.Word;
+import br.com.termoword.exception.WordNotFoundException;
 import br.com.termoword.dto.word.WordResponse;
 import br.com.termoword.dto.word.CreateWordRequest;
 import br.com.termoword.repository.WordRepository;
 
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service 
 public class WordService {
@@ -26,5 +29,17 @@ public class WordService {
         Word savedWord = wordrepository.save(word);
 
         return WordResponse.fromEntity(savedWord);
+    }
+
+    public WordResponse findById(Long id) {
+        Word word = wordrepository.findById(id)
+                .orElseThrow(() -> new WordNotFoundException(id));
+        return WordResponse.fromEntity(word);
+    }
+
+    public List<WordResponse> findAll() {
+        return wordrepository.findAll().stream()
+                .map(WordResponse::fromEntity)
+                .toList();
     }
 }
