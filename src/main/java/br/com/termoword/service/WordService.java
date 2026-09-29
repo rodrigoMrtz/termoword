@@ -5,6 +5,7 @@ import br.com.termoword.exception.WordNotFoundException;
 import br.com.termoword.dto.word.WordResponse;
 import br.com.termoword.dto.word.CreateWordRequest;
 import br.com.termoword.repository.WordRepository;
+import br.com.termoword.dto.word.UpdateWordRequest;
 
 import org.springframework.stereotype.Service;
 
@@ -41,5 +42,27 @@ public class WordService {
         return wordrepository.findAll().stream()
                 .map(WordResponse::fromEntity)
                 .toList();
+    }
+
+    public WordResponse update(Long id, UpdateWordRequest request){
+        
+        Word word = wordrepository.findById(id)
+            .orElseThrow(() -> new WordNotFoundException(id));
+
+        word.setWord(request.word());
+        word.setLanguage(request.language());
+        word.setCategory(request.category());
+        word.setDifficulty(request.difficulty());
+
+        Word updatedWord = wordrepository.save(word);
+
+        return WordResponse.fromEntity(updatedWord);
+    }
+
+    public void delete(Long id){
+        Word word = wordrepository.findById(id)
+            .orElseThrow(() -> new WordNotFoundException(id));
+        
+        wordrepository.delete(word);
     }
 }

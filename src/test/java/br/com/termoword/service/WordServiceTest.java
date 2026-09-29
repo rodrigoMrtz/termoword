@@ -1,9 +1,11 @@
 package br.com.termoword.service;
 
 import br.com.termoword.entity.Word;
+import br.com.termoword.exception.WordNotFoundException;
 import br.com.termoword.dto.word.CreateWordRequest;
 import br.com.termoword.dto.word.WordResponse;
 import br.com.termoword.repository.WordRepository;
+import br.com.termoword.dto.word.UpdateWordRequest;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -89,5 +91,80 @@ class WordServiceTest {
             .hasMessage("Palavra nao encontrada com o id:999");
         
         verify(wordRepository).findById(999L);
+    }
+
+    @Test
+    void shouldUpdateWord(){
+        
+        Word existingWord = new Word();
+        existingWord.setWord("LIVRO");
+        existingWord.setLanguage("pt-BR");
+        existingWord.setCategory("geral");
+        existingWord.setDifficulty("EASY");
+
+        CreateWordRequest request = new CreateWordRequest
+            ("CASAS",
+            "pt-BR",
+            "geral",
+            "Medium"
+        );
+
+        when(wordRepository.findById(1L))
+            .thenReturn(java.util.Optional.of(existingWord));
+
+        when(wordRepository.save(existingWord))
+            .thenReturn(existingWord);
+
+        WordResponse response = wordService.update(
+            1L, 
+                new UpdateWordRequest(
+                    request.word(),
+                    request.language(),
+                    request.category(),
+                    request.difficulty()
+                )
+        );
+
+        assertThat(response.word()).isEqualTo(request.word());
+        assertThat(response.language()).isEqualTo(request.language());
+        assertThat(response.category()).isEqualTo(request.category());
+        assertThat(response.difficulty()).isEqualTo(request.difficulty());
+
+        verify(wordRepository).findById(1L);
+        verify(wordRepository).save(existingWord);
+    }
+
+    @Test
+    void shouldDelete(){
+
+        Word word = new Word();
+        word.setWord("LIVRO");
+        word.setLanguage("pt-BR");
+        word.setCategory("geral");
+        word.setDifficulty("EASY");
+
+        when(wordRepository.findById(1L))
+            .thenReturn(java.util.Optional.of(word));
+        
+        wordService.delete(1L);
+
+        verify(wordRepository).findById(1L);
+        verify(wordRepository).delete(word);
+    }
+
+    @Test 
+    void shouldThrownExceptionWhenDeletingWordDoesNotExist(){
+
+        when(wordRepository.findById(999L))
+            .thenReturn(java.util.Optional.empty());
+        
+        assertThatThrownBy(
+            () -> wordService.delete(999L)
+        )
+            .isInstanceOf(WordNotFoundException.class)
+            .hasMessage("Palavra nao encontrada com o id:999");
+
+        verify(wordRepository).findById(999L);
+        verify(wordRepository, never()).delete(any(Word.class));
     }
 }
